@@ -31,6 +31,6 @@ class Database {
   }
 }
 
-const instanceMongoDb = Database.getInstance();
+const  instanceMongoDb = Database.getInstance();
 
 module.exports = instanceMongoDb;

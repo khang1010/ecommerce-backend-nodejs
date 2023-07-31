@@ -9,14 +9,22 @@ var keyTokenSchema = new mongoose.Schema({
         required:true,
         ref:'Shop'
     },
+    privateKey: {
+        type: String,
+        required:true,
+    },
     publicKey:{
         type:String,
         required:true,
     },
-    refreshToken:{
+    refreshTokenUsed:{
         type:Array,
         default: []
     },
+    refreshToken: {
+        type:String,
+        required:true,
+    }
 }, {
     timestamps: true,
     collection: COLLECTION_NAME

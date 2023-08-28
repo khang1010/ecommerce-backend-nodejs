@@ -34,6 +34,7 @@ app.use((error, req, res, next) => {
     const statusCode = error.status || 500;
     return res.status(statusCode).json({
         message: error.message,
+        stack: error.stack,
         status: statusCode,
     })
 })

@@ -24,6 +24,35 @@ const RoleShop = {
 };
 
 class AccessService {
+  static handleRefreshTokenV2 = async ({user, keyStore, refreshToken}) => {
+    const {userId, email} = user;
+
+    if (keyStore.refreshTokenUsed.includes(refreshToken)) {
+      await deleteByUserId(userId);
+      throw new ForbiddenError('Something went wrong! Please try again');
+    }
+    
+    if (!keyStore.refreshToken === refreshToken) {
+      throw new AuthenticationError('Token is not valid');
+    }
+
+    const foundShop = await findByEmail(email);
+    if (!foundShop) throw new AuthenticationError('Shop is not registered');
+
+    const tokens = await createTokenPair(
+      { userId, email },
+      keyStore.publicKey,
+      keyStore.privateKey
+    );
+
+    await updateRefreshToken(refreshToken, tokens);
+
+    return {
+      user,
+      tokens,
+    };
+  };
+
   static handleRefreshToken = async (refreshToken) => {
     const foundToken = await findByRefreshTokenUsed(refreshToken);
     // console.log("found token", foundToken);
